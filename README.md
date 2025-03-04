@@ -20,4 +20,4 @@ KDE bug: https://bugs.kde.org/show_bug.cgi?id=484439
 
 # CREDITS
 
-Big thanks @zvova7890 for example with KWin InputEventSpy.
+Big thanks [@zvova7890](https://github.com/zvova7890) for example with KWin InputEventSpy.
