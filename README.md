@@ -1,3 +1,4 @@
+# SUMMARY
 Kwin plugin for switching languages ​​using Alt-Shift (Wayland).
 
 This is Wayland-only plugin. For X11 use: https://github.com/Azq2/alt-shift-kbd-layout-switcher
