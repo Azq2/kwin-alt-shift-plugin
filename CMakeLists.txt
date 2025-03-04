@@ -1,13 +1,11 @@
-# SPDX-FileCopyrightText: None
-# SPDX-License-Identifier: CC0-1.0
-
 cmake_minimum_required(VERSION 3.20)
-project(quick-effect)
+project(KWinAltShiftPlugin)
 
 set(KF6_MIN_VERSION "6.0.0")
 
 find_package(ECM ${KF6_MIN_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
+set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
 include(FeatureSummary)
 include(KDEInstallDirs)
@@ -15,22 +13,22 @@ include(KDECMakeSettings)
 include(KDECompilerSettings NO_POLICY_SCOPE)
 
 find_package(Qt6 CONFIG REQUIRED COMPONENTS
-    Core
-    Widgets
+	Core
+	Widgets
 )
 
 find_package(KWin REQUIRED COMPONENTS
-    kwin
+	kwin
 )
 
-kcoreaddons_add_plugin(ctrlshiftlayoutswitch INSTALL_NAMESPACE "kwin/plugins")
-target_sources(ctrlshiftlayoutswitch PRIVATE
-    main.cpp
-    eventlistener.cpp
+kcoreaddons_add_plugin(AltShiftPlugin INSTALL_NAMESPACE "kwin/plugins")
+target_sources(AltShiftPlugin PRIVATE
+	main.cpp
+	eventlistener.cpp
 )
 
-target_link_libraries(ctrlshiftlayoutswitch PRIVATE
-    KWin::kwin
+target_link_libraries(AltShiftPlugin PRIVATE
+	KWin::kwin
 )
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)

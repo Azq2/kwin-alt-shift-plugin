@@ -1,8 +1,3 @@
-/*
-    SPDX-FileCopyrightText: 2024 Vlad Zahorodnii <vlad.zahorodnii@kde.org>
-
-    SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
-*/
 #include "eventlistener.h"
 #include "kwin/input.h"
 #include "kwin/input_event.h"
@@ -12,44 +7,34 @@
 
 #include <QDebug>
 
-namespace KWin
-{
+namespace KWin {
 
-EventListener::EventListener()
-{
-    qInfo() << "xuj?";
-    input()->installInputEventSpy(this);
+EventListener::EventListener() {
+	input()->installInputEventSpy(this);
 }
 
-void EventListener::keyEvent(KeyEvent *event)
-{
-    if (event->type() != QEvent::KeyPress && event->type() != QEvent::KeyRelease) {
-        return;
-    }
+void EventListener::keyboardKey(KeyboardKeyEvent *event) {
+	if (event->state != KeyboardKeyState::Pressed && event->state != KeyboardKeyState::Released)
+		return;
 
-    QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
-    bool pressed = event->type() == QEvent::KeyPress;
+	if (event->nativeScanCode != KEY_LEFTALT && event->nativeScanCode != KEY_LEFTSHIFT)
+		return;
 
-    if (keyEvent->nativeScanCode() != KEY_LEFTALT && keyEvent->nativeScanCode() != KEY_LEFTSHIFT) {
-        return;
-    }
+	switch (event->nativeScanCode) {
+		case KEY_LEFTALT:
+			m_altPressed = (event->state == KeyboardKeyState::Pressed);
+		break;
 
-    switch (keyEvent->nativeScanCode())
-    {
-        case KEY_LEFTALT:
-            pressed? m_keysPressed |= Qt::AltModifier : m_keysPressed &= ~Qt::AltModifier;
-            break;
+		case KEY_LEFTSHIFT:
+			m_shiftPressed = (event->state == KeyboardKeyState::Pressed);
+		break;
+	}
 
-        case KEY_LEFTSHIFT:
-            pressed? m_keysPressed |= Qt::ShiftModifier : m_keysPressed &= ~Qt::ShiftModifier;
-            break;
-    }
-
-    if ((m_keysPressed & Qt::AltModifier) && (m_keysPressed & Qt::ShiftModifier)) {
-        auto layout = input()->keyboard()->keyboardLayout();
-        layout->switchToNextLayout();
-        return;
-    }
+	if (m_altPressed && m_shiftPressed) {
+		auto layout = input()->keyboard()->keyboardLayout();
+		layout->switchToNextLayout();
+		return;
+	}
 }
 
 } // namespace KWin
